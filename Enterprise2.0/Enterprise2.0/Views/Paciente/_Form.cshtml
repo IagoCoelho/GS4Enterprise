@@ -1,0 +1,34 @@
+﻿@model UsuarioPaciente
+
+<input asp-for="IdPaciente"/>
+<div class="mb-3">
+    <label asp-for="NomePaciente"></label>
+    <input asp-for="NomePaciente" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="DoencaCronica"></label>
+    <input asp-for="DoencaCronica" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="DtNascimento"></label>
+    <input asp-for="DtNascimento" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Genero"></label>
+    <select asp-for="Genero" class="form-select"
+            asp-items="@ViewBag.Genero">
+        <option>Selecione</option>
+    </select>
+</div>
+<div class="mb-3">
+    <label asp-for="Endereco"></label>
+    <input asp-for="Endereco" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Telefone"></label>
+    <input asp-for="Telefone" class="form-control" />
+</div>
+<div class="mb-3">
+    <input asp-for="Email" />
+    <label asp-for="Email"></label>
+</div>

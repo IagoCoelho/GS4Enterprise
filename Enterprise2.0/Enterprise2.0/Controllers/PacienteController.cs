@@ -65,7 +65,7 @@ namespace Enterprise2._0.Controllers
             //Criar uma lista de string com as marcas
             var lista = new List<string>(new string[] {"Masculino", "Feminino"});
             //Envia as opções do select da marca para a view
-            ViewBag.marcas = new SelectList(lista);
+            ViewBag.genero = new SelectList(lista);
         }
 
         [HttpPost]

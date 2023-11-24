@@ -1,4 +1,6 @@
-﻿namespace Enterprise2._0.Models
+﻿using System.Collections.ObjectModel;
+
+namespace Enterprise2._0.Models
 {
     public class UsuarioPaciente
     {
@@ -11,6 +13,11 @@
         public String? Endereco { get; set; }
         public String? Telefone { get; set; }
         public String? Email { get; set; }
+        public Ficha ficha { get; set; }
+        public ContatosEmergencia contatos { get; set; }
+        public AgendaPaciente agenda { get; set; }
+        public PlanoSaude plano { get; set; }
+        public ICollection<UsuarioMedico> medicos { get; set; }
     }
 
     public enum Genero 

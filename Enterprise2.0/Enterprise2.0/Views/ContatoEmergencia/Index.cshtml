@@ -1,0 +1,71 @@
+﻿@model List<ContatosEmergencia>
+
+@{
+    ViewData["Title"] = "Contatos";
+}
+
+@section Banner {
+    <div class="alert alert-info text-center">
+        Cadastro de novos contatos de emergência.
+    </div>
+}
+
+<h1>Contatos de Emergência</h1>
+
+<mensagem texto="@TempData["msg"]" class="alert alert-danger"></mensagem>
+
+<a asp-action="cadastrar" class="btn btn-sm btn-outline-danger">Cadastrar</a>
+
+<table class="table">
+    <tr>
+        <th>Nome do contato</th>
+        <th>Parentesco</th>
+        <th>CPF</th>
+        <th>Data de nascimento</th>
+        <th>Gênero</th>
+        <th>Endereço</th>
+        <th>Telefone</th>
+        <th>Email</th>
+    </tr>
+    @foreach(var c in Model)
+    {
+        <tr>
+            <td>@c.NomeContato</td>
+            <td>@c.Parentesco</td>
+            <td>@c.Cpf</td>
+            <td>@c.DtNascimento</td>
+            <td>@c.Genero</td>
+            <td>@c.Endereco</td>
+            <td>@c.Telefone</td>
+            <td>@c.Email</td>
+            <td>
+                <a asp-action="editar" class="btn btn-sm btn-outline-primary"
+                    asp-route-id="@c.IdContatosEmergencia">Editar</a>
+                <button onclick="contatoEmergenciaId.value = @c.IdContatosEmergencia" type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Remover
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deseja realmente apagar o contato?
+      </div>
+      <div class="modal-footer">
+        <form asp-action="remover">
+                    <input name="id" type="hidden" id="contatoEmergenciaId" />
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+            <button type="submit" class="btn btn-danger">Sim</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@model PlanoSaude
+
+@{
+    ViewData["Title"] = "Cadastro de Plano de Saúde";
+}
+
+<h1>Cadastro de Plano de Saúde</h1>
+
+<mensagem texto="@TempData["msg"]"></mensagem>
+
+<form asp-action="cadastrar">
+    <partial name="_Form"/>
+    <botao></botao>
+    <a asp-action="index" class="btn btn-dark">Lista de Plano de Saúde</a>
+</form>

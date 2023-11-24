@@ -13,17 +13,17 @@ namespace Enterprise2._0.Controllers
         public IActionResult Remover(int id)
         {
            
-            _lista.RemoveAt(_lista.FindIndex(ce => ce.IdContatosEmergencia == id));
-            TempData["msg"] = "Contato de emeregência removido!";
+            _lista.RemoveAt(_lista.FindIndex(c => c.IdContatosEmergencia == id));
+            TempData["msg"] = "Contato removido!";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Editar(ContatosEmergencia emergencia)
+        public IActionResult Editar(ContatosEmergencia contato)
         {
-            var index = _lista.FindIndex(ce => ce.IdContatosEmergencia == ce.IdContatosEmergencia);
-            _lista[index] = emergencia;
-            TempData["msg"] = "Contato de emergência atualizado!";
+            var index = _lista.FindIndex(c => c.IdContatosEmergencia == c.IdContatosEmergencia);
+            _lista[index] = contato;
+            TempData["msg"] = "Contato atualizado!";
             return RedirectToAction("editar");
         }
 
@@ -32,9 +32,9 @@ namespace Enterprise2._0.Controllers
         {
             ListarGeneros();
  
-            var index = _lista.FindIndex(ce => ce.IdContatosEmergencia == id);
-            var emergencia = _lista[index];
-            return View(emergencia);
+            var index = _lista.FindIndex(c => c.IdContatosEmergencia == id);
+            var contato = _lista[index];
+            return View(contato);
         }
 
         public IActionResult Index()
@@ -56,11 +56,11 @@ namespace Enterprise2._0.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(ContatosEmergencia emergencia)
+        public IActionResult Cadastrar(ContatosEmergencia contato)
         {
-            emergencia.IdContatosEmergencia = ++_id;
-            _lista.Add(emergencia);
-            TempData["msg"] = "Contato de emergêcia cadastrado!";
+            contato.IdContatosEmergencia = ++_id;
+            _lista.Add(contato);
+            TempData["msg"] = "Contato cadastrado!";
             return RedirectToAction("Cadastrar");
         }
     }

@@ -1,16 +1,16 @@
-﻿@model List<ContatosEmergencia>
+﻿@model List<Ficha>
 
 @{
-    ViewData["Title"] = "Contatos de Emergência";
+    ViewData["Title"] = "Fichas";
 }
 
 @section Banner {
     <div class="alert alert-info text-center">
-        Cadastro de novos contatos de emergência.
+        Cadastro de novas fichas.
     </div>
 }
 
-<h1>Contatos de Emergência</h1>
+<h1>Fichas</h1>
 
 <mensagem texto="@TempData["msg"]" class="alert alert-danger"></mensagem>
 
@@ -18,30 +18,26 @@
 
 <table class="table">
     <tr>
-        <th>Nome do contato de emergência</th>
-        <th>Parentesco</th>
-        <th>CPF</th>
-        <th>Data de nascimento</th>
-        <th>Gênero</th>
-        <th>Endereço</th>
-        <th>Telefone</th>
-        <th>Email</th>
+        <th>Sintomas Atuais</th>
+        <th>Medicamentos em uso</th>
+        <th>Alergias</th>
+        <th>Peso</th>
+        <th>Altura</th>
+        <th>Observacoes</th>
     </tr>
-    @foreach(var ce in Model)
+    @foreach(var f in Model)
     {
         <tr>
-            <td>@ce.NomeContato</td>
-            <td>@ce.Parentesco</td>
-            <td>@ce.Cpf</td>
-            <td>@ce.DtNascimento</td>
-            <td>@ce.Genero</td>
-            <td>@ce.Endereco</td>
-            <td>@ce.Telefone</td>
-            <td>@ce.Email</td>
+            <td>@f.SintomasAtuais</td>
+            <td>@f.MedicamentosUso</td>
+            <td>@f.Alergias</td>
+            <td>@f.Peso</td>
+            <td>@f.Altura</td>
+            <td>@f.Observacoes</td>
             <td>
                 <a asp-action="editar" class="btn btn-sm btn-outline-primary"
-                   asp-route-id="@ce.IdContatosEmergencia">Editar</a>
-                <button onclick="ContatosEmergenciaId.value = @ce.IdContatosEmergencia" type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    asp-route-id="@f.IdFicha">Editar</a>
+                <button onclick="fichaId.value = @f.IdFicha" type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                   Remover
                 </button>
             </td>
@@ -49,6 +45,7 @@
     }
 </table>
 
+<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -57,11 +54,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Deseja realmente apagar o contato de emergência?
+        Deseja realmente apagar a ficha do paciente?
       </div>
       <div class="modal-footer">
         <form asp-action="remover">
-                    <input name="id" type="hidden" id="ContatosEmergenciaId" />
+                    <input name="id" type="hidden" id="fichaId" />
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
             <button type="submit" class="btn btn-danger">Sim</button>
         </form>

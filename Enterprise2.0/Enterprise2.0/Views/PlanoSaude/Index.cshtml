@@ -1,0 +1,63 @@
+﻿@model List<PlanoSaude>
+
+@{
+    ViewData["Title"] = "Plano de saúde";
+}
+
+@section Banner {
+    <div class="alert alert-info text-center">
+        Cadastro de novos planos de saúde.
+    </div>
+}
+
+<h1>Planode de saúde</h1>
+
+<mensagem texto="@TempData["msg"]" class="alert alert-danger"></mensagem>
+
+<a asp-action="cadastrar" class="btn btn-sm btn-outline-danger">Cadastrar</a>
+
+<table class="table">
+    <tr>
+        <th>Nome do plano de saúde</th>
+        <th>Tipo de plano</th>
+        <th>Cobertura</th>
+        <th>Carencia</th>
+    </tr>
+    @foreach(var ps in Model)
+    {
+        <tr>
+            <td>@ps.NomePlano</td>
+            <td>@ps.TipoPlano</td>
+            <td>@ps.Cobertura</td>
+            <td>@ps.Carencia</td>
+            <td>
+                <a asp-action="editar" class="btn btn-sm btn-outline-primary"
+                    asp-route-id="@ps.IdPlanoSaude">Editar</a>
+                <button onclick="planoId.value = @ps.IdPlanoSaude" type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Remover
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deseja realmente apagar o plano de saúde?
+      </div>
+      <div class="modal-footer">
+        <form asp-action="remover">
+                    <input name="id" type="hidden" id="planoId" />
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+            <button type="submit" class="btn btn-danger">Sim</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

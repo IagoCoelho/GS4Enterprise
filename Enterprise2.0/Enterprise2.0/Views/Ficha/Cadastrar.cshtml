@@ -1,0 +1,15 @@
+﻿@model Ficha
+
+@{
+    ViewData["Title"] = "Cadastro de Ficha";
+}
+
+<h1>Cadastro de Ficha do Paciente</h1>
+
+<mensagem texto="@TempData["msg"]"></mensagem>
+
+<form asp-action="cadastrar">
+    <partial name="_Form"/>
+    <botao></botao>
+    <a asp-action="index" class="btn btn-dark">Lista de Fichas</a>
+</form>

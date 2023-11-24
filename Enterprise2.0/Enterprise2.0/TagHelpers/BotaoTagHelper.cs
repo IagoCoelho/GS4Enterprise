@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Fiap.Aula04.Web.TagHelpers
+namespace Enterprise2._0.TagHelpers
 {
-    //Tag: <botao></botao>
-    //Tag resultado: <button class="btn btn-primary">Cadastrar</button>
+ 
     public class BotaoTagHelper : TagHelper
     {
-        public string? Texto { get; set; } = "Cadastrar";
+        public string? Texto { get; set; } = "Salvar";
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {

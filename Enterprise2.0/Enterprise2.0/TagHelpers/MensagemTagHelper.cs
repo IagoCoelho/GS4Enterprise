@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Fiap.Aula04.Web.TagHelpers
+namespace Enterprise2._0.TagHelpers
 {
     public class MensagemTagHelper : TagHelper
     {

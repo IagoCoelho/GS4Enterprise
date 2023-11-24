@@ -1,0 +1,64 @@
+﻿@model List<AgendaPaciente>
+
+@{
+    ViewData["Title"] = "Agendas";
+}
+
+@section Banner {
+    <div class="alert alert-info text-center">
+        Cadastro de novas agendas.
+    </div>
+}
+
+<h1>Agendas</h1>
+
+<mensagem texto="@TempData["msg"]" class="alert alert-danger"></mensagem>
+
+<a asp-action="cadastrar" class="btn btn-sm btn-outline-danger">Cadastrar</a>
+
+<table class="table">
+    <tr>
+        <th>Remedio</th>
+        <th>Descrição</th>
+        <th>Data de Inicio</th>
+        <th>Data Fim</th>
+    </tr>
+    @foreach(var ap in Model)
+    {
+        <tr>
+            <td>@ap.Remedio</td>
+            <td>@ap.Descricao</td>
+            <td>@ap.DtInicio</td>
+            <td>@ap.DtFim</td>
+            <td>
+                <a asp-action="editar" class="btn btn-sm btn-outline-primary"
+                   asp-route-id="@ap.IdAgenda">Editar</a>
+                <button onclick="agendaId.value = @ap.IdAgenda" type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Remover
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deseja realmente apagar a agenda?
+      </div>
+      <div class="modal-footer">
+        <form asp-action="remover">
+            <input name="id" type="hidden" id="agendaId"/>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+            <button type="submit" class="btn btn-danger">Sim</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

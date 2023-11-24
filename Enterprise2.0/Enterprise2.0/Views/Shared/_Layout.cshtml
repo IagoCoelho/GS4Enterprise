@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FIAP Motors</title>
+    <title>@ViewData["Title"] - For All</title>
     <link rel="stylesheet" href="https://bootswatch.com/5/slate/bootstrap.min.css" />
     <!-- <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -13,7 +13,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FIAP Motors</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">For All</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,11 +25,15 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Carro
+                                Cadastro
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-action="cadastrar" asp-controller="carro">Cadastrar</a></li>
-                                <li><a class="dropdown-item" asp-action="index" asp-controller="carro">Listar</a></li>
+                                <li><a class="dropdown-item" asp-action="cadastrar" asp-controller="paciente">Cadastrar Paciente</a></li>
+                                <li><a class="dropdown-item" asp-action="cadastrar" asp-controller="medico">Cadastrar Médico</a></li>
+                                <li><a class="dropdown-item" asp-action="cadastrar" asp-controller="emergencia">Cadastrar Contato de Emergência</a></li>
+                                <li><a class="dropdown-item" asp-action="cadastrar" asp-controller="carro">Cadastrar Ficha</a></li>
+                                <li><a class="dropdown-item" asp-action="cadastrar" asp-controller="carro">Cadastrar Plano de Saúde</a></li>
+                                <li><a class="dropdown-item" asp-action="cadastrar" asp-controller="agenda">Cadastrar Agenda de paciente</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -52,7 +56,7 @@
             @RenderSection("Banner", false)
         </div>
         <div class="container">
-            &copy; 2023 - FIAP Motors - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - For All - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

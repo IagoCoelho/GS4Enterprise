@@ -6,6 +6,6 @@
         public String? Remedio { get; set; }
         public string? Descricao { get; set;}
         public DateTime DtInicio { get; set; }
-        public DateTime DtFim { get; set; }
+        public DateTime? DtFim { get; set; }
     }
 }

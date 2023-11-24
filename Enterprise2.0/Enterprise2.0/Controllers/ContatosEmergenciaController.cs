@@ -4,26 +4,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Enterprise2._0.Controllers
 {
-    public class PacienteController : Controller
+    public class ContatosEmergenciaController : Controller
     {
-        private static List<UsuarioPaciente> _lista = new List<UsuarioPaciente>();
+        private static List<ContatosEmergencia> _lista = new List<ContatosEmergencia>();
         private static int _id = 0;
 
         [HttpPost]
         public IActionResult Remover(int id)
         {
            
-            _lista.RemoveAt(_lista.FindIndex(p => p.IdPaciente == id));
-            TempData["msg"] = "Paciente removido!";
+            _lista.RemoveAt(_lista.FindIndex(ce => ce.IdContatosEmergencia == id));
+            TempData["msg"] = "Contato de emeregência removido!";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Editar(UsuarioPaciente paciente)
+        public IActionResult Editar(ContatosEmergencia emergencia)
         {
-            var index = _lista.FindIndex(p => p.IdPaciente == p.IdPaciente);
-            _lista[index] = paciente;
-            TempData["msg"] = "Paciente atualizado!";
+            var index = _lista.FindIndex(ce => ce.IdContatosEmergencia == ce.IdContatosEmergencia);
+            _lista[index] = emergencia;
+            TempData["msg"] = "Contato de emergência atualizado!";
             return RedirectToAction("editar");
         }
 
@@ -32,9 +32,9 @@ namespace Enterprise2._0.Controllers
         {
             ListarGeneros();
  
-            var index = _lista.FindIndex(p => p.IdPaciente == id);
-            var paciente = _lista[index];
-            return View(paciente);
+            var index = _lista.FindIndex(ce => ce.IdContatosEmergencia == id);
+            var emergencia = _lista[index];
+            return View(emergencia);
         }
 
         public IActionResult Index()
@@ -56,11 +56,11 @@ namespace Enterprise2._0.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(UsuarioPaciente paciente)
+        public IActionResult Cadastrar(ContatosEmergencia emergencia)
         {
-            paciente.IdPaciente = ++_id;
-            _lista.Add(paciente);
-            TempData["msg"] = "Paciente cadastrado!";
+            emergencia.IdContatosEmergencia = ++_id;
+            _lista.Add(emergencia);
+            TempData["msg"] = "Contato de emergêcia cadastrado!";
             return RedirectToAction("Cadastrar");
         }
     }

@@ -1,0 +1,14 @@
+﻿@model ContatosEmergencia
+
+@{
+    ViewData["Title"] = "Edição de Contatos de emergência";
+}
+<h1>Edição de Contatos de emergência</h1>
+
+<mensagem texto="@TempData["msg"]"></mensagem>
+
+<form asp-action="editar">
+    <partial name="_Form" />
+    <botao texto="Editar"></botao>
+    <a asp-action="index" class="btn btn-light">Cancelar</a>
+</form>

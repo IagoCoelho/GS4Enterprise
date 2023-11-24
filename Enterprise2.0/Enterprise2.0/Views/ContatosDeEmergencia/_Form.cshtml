@@ -1,0 +1,38 @@
+﻿@model ContatosEmergencia
+
+<input asp-for="IdContatosEmergencia" />
+<div class="mb-3">
+    <label asp-for="NomeContato"></label>
+    <input asp-for="NomeContato" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Parentesco"></label>
+    <input asp-for="Parentesco" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Cpf"></label>
+    <input asp-for="Cpf" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="DtNascimento"></label>
+    <input asp-for="DtNascimento" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Genero"></label>
+    <select asp-for="Genero" class="form-select"
+            asp-items="@ViewBag.Genero">
+        <option>Selecione</option>
+    </select>
+</div>
+<div class="mb-3">
+    <label asp-for="Endereco"></label>
+    <input asp-for="Endereco" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Telefone"></label>
+    <input asp-for="Telefone" class="form-control" />
+</div>
+<div class="mb-3">
+    <input asp-for="Email" />
+    <label asp-for="Email"></label>
+</div>

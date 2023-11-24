@@ -1,0 +1,15 @@
+﻿@model AgendaPaciente
+
+@{
+    ViewData["Title"] = "Cadastro de Agenda de Paciente";
+}
+
+<h1>Cadastro de Agenda Paciente</h1>
+
+<mensagem texto="@TempData["msg"]"></mensagem>
+
+<form asp-action="cadastrar">
+    <partial name="_Form"/>
+    <botao></botao>
+    <a asp-action="index" class="btn btn-dark">Lista de Agendas</a>
+</form>

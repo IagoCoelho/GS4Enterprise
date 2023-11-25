@@ -6,18 +6,19 @@ namespace Enterprise2._0.Models
     {
         public int IdPaciente { get; set; }
         public string? NomePaciente { get; set; }
-        public string? DoencaCronica { get; set; }
-        public string? Cpf { get; set; }
+        public string? DoencasCronicas { get; set; }
+        public string? NrCpf { get; set; }
         public DateTime DtNascimento { get; set; }
-        public Genero Genero { get; set; }
-        public String? Endereco { get; set; }
-        public String? Telefone { get; set; }
-        public String? Email { get; set; }
-        public Ficha ficha { get; set; }
-        public ContatosEmergencia contatos { get; set; }
-        public AgendaPaciente agenda { get; set; }
-        public PlanoSaude plano { get; set; }
-        public ICollection<UsuarioMedico> medicos { get; set; }
+        public string? Sexo { get; set; }
+        public string? Endereco { get; set; }
+        public string? NrTelefone { get; set; }
+        public string? NnEmail { get; set; }
+
+        // Relacionamentos com outras entidades
+        public ICollection<AgendaPaciente>? AgendasPacientes { get; set; }
+        public ContatosEmergencia? ContatosEmergencia { get; set; }
+        public Ficha? Ficha { get; set; }
+        public PlanoSaude? PlanoSaude { get; set; }
     }
 
     public enum Genero 

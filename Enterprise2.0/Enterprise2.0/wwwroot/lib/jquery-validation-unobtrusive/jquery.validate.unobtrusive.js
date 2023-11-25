@@ -126,7 +126,7 @@
             result = $form.data(data_validation),
             onResetProxy = $.proxy(onReset, form),
             defaultOptions = $jQval.unobtrusive.options || {},
-            execInContext = function (name, args) {
+            execInContextNew = function (name, args) {
                 var func = defaultOptions[name];
                 func && $.isFunction(func) && func.apply(form, args);
             };
@@ -138,17 +138,17 @@
                     errorElement: defaultOptions.errorElement || "span",
                     errorPlacement: function () {
                         onError.apply(form, arguments);
-                        execInContext("errorPlacement", arguments);
+                        execInContextNew("errorPlacement", arguments);
                     },
                     invalidHandler: function () {
                         onErrors.apply(form, arguments);
-                        execInContext("invalidHandler", arguments);
+                        execInContextNew("invalidHandler", arguments);
                     },
                     messages: {},
                     rules: {},
                     success: function () {
                         onSuccess.apply(form, arguments);
-                        execInContext("success", arguments);
+                        execInContextNew("success", arguments);
                     }
                 },
                 attachValidation: function () {

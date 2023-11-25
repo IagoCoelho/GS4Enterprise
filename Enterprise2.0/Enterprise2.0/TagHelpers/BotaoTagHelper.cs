@@ -8,7 +8,7 @@ namespace Fiap.Aula04.Web.TagHelpers
     {
         public string? Texto { get; set; } = "Cadastrar";
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext ContextNew, TagHelperOutput output)
         {
             //Definir o nome da tag html
             output.TagName = "button";

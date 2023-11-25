@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {}
+    "C:\\Users\\mrjoa\\Desktop\\ENTERPRISE-GS-4\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {
+    "C:\\Users\\mrjoa\\Desktop\\ENTERPRISE-GS-4\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
+        "projectUniqueName": "C:\\Users\\mrjoa\\Desktop\\ENTERPRISE-GS-4\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
         "projectName": "Enterprise2.0",
-        "projectPath": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
-        "packagesPath": "C:\\Users\\Iago\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\obj\\",
+        "projectPath": "C:\\Users\\mrjoa\\Desktop\\ENTERPRISE-GS-4\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
+        "packagesPath": "C:\\Users\\mrjoa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mrjoa\\Desktop\\ENTERPRISE-GS-4\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Iago\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mrjoa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,6 +39,18 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -58,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -7,5 +7,9 @@
         public string? TipoPlano { get; set; }
         public string? Cobertura { get; set; }
         public string? Carencia { get; set; }
+
+        // Relacionamento com UsuarioPaciente
+        public int UsuarioPacienteId { get; set; }
+        public UsuarioPaciente? UsuarioPaciente { get; set; }
     }
 }

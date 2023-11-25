@@ -339,7 +339,7 @@ const customEvents = {
   mouseleave: 'mouseout'
 };
 const customEventsRegex = /^(mouseenter|mouseleave)/i;
-const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
+const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'ContextNewmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
 /**
  * ------------------------------------------------------------------------
  * Private methods
@@ -2267,30 +2267,30 @@ class Dropdown extends BaseComponent {
     const toggles = SelectorEngine.find(SELECTOR_DATA_TOGGLE$3);
 
     for (let i = 0, len = toggles.length; i < len; i++) {
-      const context = Dropdown.getInstance(toggles[i]);
+      const ContextNew = Dropdown.getInstance(toggles[i]);
 
-      if (!context || context._config.autoClose === false) {
+      if (!ContextNew || ContextNew._config.autoClose === false) {
         continue;
       }
 
-      if (!context._isShown()) {
+      if (!ContextNew._isShown()) {
         continue;
       }
 
       const relatedTarget = {
-        relatedTarget: context._element
+        relatedTarget: ContextNew._element
       };
 
       if (event) {
         const composedPath = event.composedPath();
-        const isMenuTarget = composedPath.includes(context._menu);
+        const isMenuTarget = composedPath.includes(ContextNew._menu);
 
-        if (composedPath.includes(context._element) || context._config.autoClose === 'inside' && !isMenuTarget || context._config.autoClose === 'outside' && isMenuTarget) {
+        if (composedPath.includes(ContextNew._element) || ContextNew._config.autoClose === 'inside' && !isMenuTarget || ContextNew._config.autoClose === 'outside' && isMenuTarget) {
           continue;
         } // Tab navigation through the dropdown menu or events from contained inputs shouldn't close the menu
 
 
-        if (context._menu.contains(event.target) && (event.type === 'keyup' && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.test(event.target.tagName))) {
+        if (ContextNew._menu.contains(event.target) && (event.type === 'keyup' && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.test(event.target.tagName))) {
           continue;
         }
 
@@ -2299,7 +2299,7 @@ class Dropdown extends BaseComponent {
         }
       }
 
-      context._completeHide(relatedTarget);
+      ContextNew._completeHide(relatedTarget);
     }
   }
 
@@ -3649,14 +3649,14 @@ class Tooltip extends BaseComponent {
     }
 
     if (event) {
-      const context = this._initializeOnDelegatedTarget(event);
+      const ContextNew = this._initializeOnDelegatedTarget(event);
 
-      context._activeTrigger.click = !context._activeTrigger.click;
+      ContextNew._activeTrigger.click = !ContextNew._activeTrigger.click;
 
-      if (context._isWithActiveTrigger()) {
-        context._enter(null, context);
+      if (ContextNew._isWithActiveTrigger()) {
+        ContextNew._enter(null, ContextNew);
       } else {
-        context._leave(null, context);
+        ContextNew._leave(null, ContextNew);
       }
     } else {
       if (this.getTipElement().classList.contains(CLASS_NAME_SHOW$2)) {
@@ -3909,8 +3909,8 @@ class Tooltip extends BaseComponent {
   } // Private
 
 
-  _initializeOnDelegatedTarget(event, context) {
-    return context || this.constructor.getOrCreateInstance(event.delegateTarget, this._getDelegateConfig());
+  _initializeOnDelegatedTarget(event, ContextNew) {
+    return ContextNew || this.constructor.getOrCreateInstance(event.delegateTarget, this._getDelegateConfig());
   }
 
   _getOffset() {
@@ -4029,57 +4029,57 @@ class Tooltip extends BaseComponent {
     }
   }
 
-  _enter(event, context) {
-    context = this._initializeOnDelegatedTarget(event, context);
+  _enter(event, ContextNew) {
+    ContextNew = this._initializeOnDelegatedTarget(event, ContextNew);
 
     if (event) {
-      context._activeTrigger[event.type === 'focusin' ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
+      ContextNew._activeTrigger[event.type === 'focusin' ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
     }
 
-    if (context.getTipElement().classList.contains(CLASS_NAME_SHOW$2) || context._hoverState === HOVER_STATE_SHOW) {
-      context._hoverState = HOVER_STATE_SHOW;
+    if (ContextNew.getTipElement().classList.contains(CLASS_NAME_SHOW$2) || ContextNew._hoverState === HOVER_STATE_SHOW) {
+      ContextNew._hoverState = HOVER_STATE_SHOW;
       return;
     }
 
-    clearTimeout(context._timeout);
-    context._hoverState = HOVER_STATE_SHOW;
+    clearTimeout(ContextNew._timeout);
+    ContextNew._hoverState = HOVER_STATE_SHOW;
 
-    if (!context._config.delay || !context._config.delay.show) {
-      context.show();
+    if (!ContextNew._config.delay || !ContextNew._config.delay.show) {
+      ContextNew.show();
       return;
     }
 
-    context._timeout = setTimeout(() => {
-      if (context._hoverState === HOVER_STATE_SHOW) {
-        context.show();
+    ContextNew._timeout = setTimeout(() => {
+      if (ContextNew._hoverState === HOVER_STATE_SHOW) {
+        ContextNew.show();
       }
-    }, context._config.delay.show);
+    }, ContextNew._config.delay.show);
   }
 
-  _leave(event, context) {
-    context = this._initializeOnDelegatedTarget(event, context);
+  _leave(event, ContextNew) {
+    ContextNew = this._initializeOnDelegatedTarget(event, ContextNew);
 
     if (event) {
-      context._activeTrigger[event.type === 'focusout' ? TRIGGER_FOCUS : TRIGGER_HOVER] = context._element.contains(event.relatedTarget);
+      ContextNew._activeTrigger[event.type === 'focusout' ? TRIGGER_FOCUS : TRIGGER_HOVER] = ContextNew._element.contains(event.relatedTarget);
     }
 
-    if (context._isWithActiveTrigger()) {
+    if (ContextNew._isWithActiveTrigger()) {
       return;
     }
 
-    clearTimeout(context._timeout);
-    context._hoverState = HOVER_STATE_OUT;
+    clearTimeout(ContextNew._timeout);
+    ContextNew._hoverState = HOVER_STATE_OUT;
 
-    if (!context._config.delay || !context._config.delay.hide) {
-      context.hide();
+    if (!ContextNew._config.delay || !ContextNew._config.delay.hide) {
+      ContextNew.hide();
       return;
     }
 
-    context._timeout = setTimeout(() => {
-      if (context._hoverState === HOVER_STATE_OUT) {
-        context.hide();
+    ContextNew._timeout = setTimeout(() => {
+      if (ContextNew._hoverState === HOVER_STATE_OUT) {
+        ContextNew.hide();
       }
-    }, context._config.delay.hide);
+    }, ContextNew._config.delay.hide);
   }
 
   _isWithActiveTrigger() {

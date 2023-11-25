@@ -7,7 +7,7 @@ namespace Fiap.Aula04.Web.TagHelpers
         public string? Texto { get; set; }
         public string? Class { get; set; } = "alert alert-success";
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext ContextNew, TagHelperOutput output)
         {
             output.TagName = "div";
             if (!string.IsNullOrEmpty(Texto))

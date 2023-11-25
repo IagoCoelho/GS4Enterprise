@@ -1,43 +1,69 @@
-﻿using Enterprise2._0.Models;
+﻿using Enterprise2._0.Data;
+using Enterprise2._0.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Enterprise2._0.Controllers
 {
     public class MedicoController : Controller
     {
-        private static List<UsuarioMedico> _lista = new List<UsuarioMedico>();
-        private static int _id = 0;
+        private readonly ContextNew _ContextNew;
+
+        public MedicoController(ContextNew ContextNew)
+        {
+            _ContextNew = ContextNew;
+        }
 
         [HttpPost]
-        public IActionResult Remover(int id)
+        public async Task<IActionResult> Remover(int id)
         {
-            _lista.RemoveAt(_lista.FindIndex(m => m.IdMedico== id));
+            var medico = await _ContextNew.UsuariosMedicos.FindAsync(id);
+            if (medico == null)
+            {
+                return NotFound();
+            }
+
+            _ContextNew.UsuariosMedicos.Remove(medico);
+            await _ContextNew.SaveChangesAsync();
             TempData["msg"] = "Médico removido!";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Editar(UsuarioMedico medico)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(UsuarioMedico medico)
         {
-            var index = _lista.FindIndex(m => m.IdMedico == m.IdMedico);
-            _lista[index] = medico;
-            TempData["msg"] = "Médoco atualizado!";
-            return RedirectToAction("editar");
-        }
-
-        [HttpGet]
-        public IActionResult Editar(int id)
-        {
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Update(medico);
+                await _ContextNew.SaveChangesAsync();
+                TempData["msg"] = "Médico atualizado!";
+                return RedirectToAction(nameof(Editar), new { id = medico.IdMedico });
+            }
             ListarGeneros();
-            var index = _lista.FindIndex(m => m.IdMedico == id);
-            var medico = _lista[index];
             return View(medico);
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
         {
-            return View(_lista);
+            var medico = await _ContextNew.UsuariosMedicos.FindAsync(id);
+            if (medico == null)
+            {
+                return NotFound();
+            }
+            ListarGeneros();
+            return View(medico);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var medicos = await _ContextNew.UsuariosMedicos.ToListAsync();
+            return View(medicos);
         }
 
         [HttpGet]
@@ -47,19 +73,25 @@ namespace Enterprise2._0.Controllers
             return View();
         }
 
-        private void ListarGeneros()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cadastrar(UsuarioMedico medico)
         {
-            var lista = new List<string>(new string[] {"Masculino", "Feminino"});
-            ViewBag.genero = new SelectList(lista);
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Add(medico);
+                await _ContextNew.SaveChangesAsync();
+                TempData["msg"] = "Médico cadastrado!";
+                return RedirectToAction(nameof(Cadastrar));
+            }
+            ListarGeneros();
+            return View(medico);
         }
 
-        [HttpPost]
-        public IActionResult Cadastrar(UsuarioMedico medico)
+        private void ListarGeneros()
         {
-            medico.IdMedico = ++_id;
-            _lista.Add(medico);
-            TempData["msg"] = "Médico cadastrado!";
-            return RedirectToAction("Cadastrar");
+            var lista = new List<string>(new string[] { "Masculino", "Feminino" });
+            ViewBag.genero = new SelectList(lista);
         }
     }
 }

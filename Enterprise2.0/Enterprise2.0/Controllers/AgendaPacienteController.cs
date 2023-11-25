@@ -1,59 +1,122 @@
-﻿using Enterprise2._0.Models;
+﻿using Enterprise2._0.Data;
+using Enterprise2._0.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Enterprise2._0.Controllers
 {
-    public class AgendaPacienteController : Controller
+    public class AgendaController : Controller
     {
-        private static List<AgendaPaciente> _lista = new List<AgendaPaciente>();
-        private static int _id = 0;
+        private readonly ContextNew _ContextNew;
 
-        [HttpPost]
-        public IActionResult Remover(int id)
+        public AgendaController(ContextNew ContextNew)
         {
-            _lista.RemoveAt(_lista.FindIndex(ap => ap.IdAgenda == id));
-            TempData["msg"] = "Agenda removido!";
-            return RedirectToAction("Index");
+            _ContextNew = ContextNew;
         }
 
-        [HttpPost]
-        public IActionResult Editar(AgendaPaciente agenda)
+        public async Task<IActionResult> Index()
         {
-            var index = _lista.FindIndex(ap => ap.IdAgenda == ap.IdAgenda);
-            _lista[index] = agenda;
-            TempData["msg"] = "Agenda atualizado!";
-            return RedirectToAction("editar");
+            var agendas = await _ContextNew.AgendasPacientes.ToListAsync();
+            return View(agendas);
         }
 
-        [HttpGet]
-        public IActionResult Editar(int id)
+        public async Task<IActionResult> Detalhes(int? id)
         {
-            var index = _lista.FindIndex(ap => ap.IdAgenda == id);
-            var agenda = _lista[index];
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var agenda = await _ContextNew.AgendasPacientes.FirstOrDefaultAsync(a => a.IdAgenda == id);
+
+            if (agenda == null)
+            {
+                return NotFound();
+            }
+
             return View(agenda);
         }
 
-        public IActionResult Index()
-        {
-            return View(_lista);
-        }
-
-        [HttpGet]
-        public IActionResult Cadastrar()
+        public IActionResult Criar()
         {
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Criar(AgendaPaciente agenda)
+        {
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Add(agenda);
+                await _ContextNew.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(agenda);
+        }
+
+        public async Task<IActionResult> Editar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var agenda = await _ContextNew.AgendasPacientes.FindAsync(id);
+
+            if (agenda == null)
+            {
+                return NotFound();
+            }
+            return View(agenda);
+        }
 
         [HttpPost]
-        public IActionResult Cadastrar(AgendaPaciente agenda)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(int id, AgendaPaciente agenda)
         {
-            agenda.IdAgenda = ++_id;
-            _lista.Add(agenda);
-            TempData["msg"] = "Agenda cadastrada!";
-            return RedirectToAction("Cadastrar");
+            if (id != agenda.IdAgenda)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Update(agenda);
+                await _ContextNew.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(agenda);
+        }
+
+        public async Task<IActionResult> Remover(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var agenda = await _ContextNew.AgendasPacientes.FirstOrDefaultAsync(a => a.IdAgenda == id);
+
+            if (agenda == null)
+            {
+                return NotFound();
+            }
+
+            return View(agenda);
+        }
+
+        [HttpPost, ActionName("Remover")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmarRemover(int id)
+        {
+            var agenda = await _ContextNew.AgendasPacientes.FindAsync(id);
+            _ContextNew.AgendasPacientes.Remove(agenda);
+            await _ContextNew.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -114,7 +114,7 @@ var document = window.document;
 				// Some browsers don't support the "nonce" property on scripts.
 				// On the other hand, just using `getAttribute` is not enough as
 				// the `nonce` attribute is reset to an empty string whenever it
-				// becomes browsing-context connected.
+				// becomes browsing-ContextNew connected.
 				// See https://github.com/whatwg/html/issues/2369
 				// See https://html.spec.whatwg.org/#nonce-attributes
 				// The `node.getAttribute` check was added for the sake of
@@ -150,11 +150,11 @@ var
 	version = "3.5.1",
 
 	// Define a local copy of jQuery
-	jQuery = function( selector, context ) {
+	jQuery = function( selector, ContextNew ) {
 
 		// The jQuery object is actually just the init constructor 'enhanced'
 		// Need init if jQuery is called (just allow error to be thrown if not included)
-		return new jQuery.fn.init( selector, context );
+		return new jQuery.fn.init( selector, ContextNew );
 	};
 
 jQuery.fn = jQuery.prototype = {
@@ -366,7 +366,7 @@ jQuery.extend( {
 		return true;
 	},
 
-	// Evaluates a script in a provided context; falls back to the global one
+	// Evaluates a script in a provided ContextNew; falls back to the global one
 	// if not specified.
 	globalEval: function( code, options, doc ) {
 		DOMEval( code, { nonce: options && options.nonce }, doc );
@@ -536,7 +536,7 @@ var i,
 	tokenize,
 	compile,
 	select,
-	outermostContext,
+	outermostContextNew,
 	sortInput,
 	hasDuplicate,
 
@@ -649,7 +649,7 @@ var i,
 
 		// For use in libraries implementing .is()
 		// We use this for POS matching in `select`
-		"needsContext": new RegExp( "^" + whitespace +
+		"needsContextNew": new RegExp( "^" + whitespace +
 			"*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" + whitespace +
 			"*((?:-\\d)?\\d*)" + whitespace + "*\\)|)(?=[^-]|$)", "i" )
 	},
@@ -752,16 +752,16 @@ try {
 	};
 }
 
-function Sizzle( selector, context, results, seed ) {
+function Sizzle( selector, ContextNew, results, seed ) {
 	var m, i, elem, nid, match, groups, newSelector,
-		newContext = context && context.ownerDocument,
+		newContextNew = ContextNew && ContextNew.ownerDocument,
 
-		// nodeType defaults to 9, since context defaults to document
-		nodeType = context ? context.nodeType : 9;
+		// nodeType defaults to 9, since ContextNew defaults to document
+		nodeType = ContextNew ? ContextNew.nodeType : 9;
 
 	results = results || [];
 
-	// Return early from calls with invalid selector or context
+	// Return early from calls with invalid selector or ContextNew
 	if ( typeof selector !== "string" || !selector ||
 		nodeType !== 1 && nodeType !== 9 && nodeType !== 11 ) {
 
@@ -770,21 +770,21 @@ function Sizzle( selector, context, results, seed ) {
 
 	// Try to shortcut find operations (as opposed to filters) in HTML documents
 	if ( !seed ) {
-		setDocument( context );
-		context = context || document;
+		setDocument( ContextNew );
+		ContextNew = ContextNew || document;
 
 		if ( documentIsHTML ) {
 
 			// If the selector is sufficiently simple, try using a "get*By*" DOM method
-			// (excepting DocumentFragment context, where the methods don't exist)
+			// (excepting DocumentFragment ContextNew, where the methods don't exist)
 			if ( nodeType !== 11 && ( match = rquickExpr.exec( selector ) ) ) {
 
 				// ID selector
 				if ( ( m = match[ 1 ] ) ) {
 
-					// Document context
+					// Document ContextNew
 					if ( nodeType === 9 ) {
-						if ( ( elem = context.getElementById( m ) ) ) {
+						if ( ( elem = ContextNew.getElementById( m ) ) ) {
 
 							// Support: IE, Opera, Webkit
 							// TODO: identify versions
@@ -797,14 +797,14 @@ function Sizzle( selector, context, results, seed ) {
 							return results;
 						}
 
-					// Element context
+					// Element ContextNew
 					} else {
 
 						// Support: IE, Opera, Webkit
 						// TODO: identify versions
 						// getElementById can match elements by name instead of ID
-						if ( newContext && ( elem = newContext.getElementById( m ) ) &&
-							contains( context, elem ) &&
+						if ( newContextNew && ( elem = newContextNew.getElementById( m ) ) &&
+							contains( ContextNew, elem ) &&
 							elem.id === m ) {
 
 							results.push( elem );
@@ -814,14 +814,14 @@ function Sizzle( selector, context, results, seed ) {
 
 				// Type selector
 				} else if ( match[ 2 ] ) {
-					push.apply( results, context.getElementsByTagName( selector ) );
+					push.apply( results, ContextNew.getElementsByTagName( selector ) );
 					return results;
 
 				// Class selector
 				} else if ( ( m = match[ 3 ] ) && support.getElementsByClassName &&
-					context.getElementsByClassName ) {
+					ContextNew.getElementsByClassName ) {
 
-					push.apply( results, context.getElementsByClassName( m ) );
+					push.apply( results, ContextNew.getElementsByClassName( m ) );
 					return results;
 				}
 			}
@@ -833,34 +833,34 @@ function Sizzle( selector, context, results, seed ) {
 
 				// Support: IE 8 only
 				// Exclude object elements
-				( nodeType !== 1 || context.nodeName.toLowerCase() !== "object" ) ) {
+				( nodeType !== 1 || ContextNew.nodeName.toLowerCase() !== "object" ) ) {
 
 				newSelector = selector;
-				newContext = context;
+				newContextNew = ContextNew;
 
 				// qSA considers elements outside a scoping root when evaluating child or
 				// descendant combinators, which is not what we want.
 				// In such cases, we work around the behavior by prefixing every selector in the
-				// list with an ID selector referencing the scope context.
+				// list with an ID selector referencing the scope ContextNew.
 				// The technique has to be used as well when a leading combinator is used
 				// as such selectors are not recognized by querySelectorAll.
 				// Thanks to Andrew Dupont for this technique.
 				if ( nodeType === 1 &&
 					( rdescend.test( selector ) || rcombinators.test( selector ) ) ) {
 
-					// Expand context for sibling selectors
-					newContext = rsibling.test( selector ) && testContext( context.parentNode ) ||
-						context;
+					// Expand ContextNew for sibling selectors
+					newContextNew = rsibling.test( selector ) && testContextNew( ContextNew.parentNode ) ||
+						ContextNew;
 
 					// We can use :scope instead of the ID hack if the browser
-					// supports it & if we're not changing the context.
-					if ( newContext !== context || !support.scope ) {
+					// supports it & if we're not changing the ContextNew.
+					if ( newContextNew !== ContextNew || !support.scope ) {
 
-						// Capture the context ID, setting it first if necessary
-						if ( ( nid = context.getAttribute( "id" ) ) ) {
+						// Capture the ContextNew ID, setting it first if necessary
+						if ( ( nid = ContextNew.getAttribute( "id" ) ) ) {
 							nid = nid.replace( rcssescape, fcssescape );
 						} else {
-							context.setAttribute( "id", ( nid = expando ) );
+							ContextNew.setAttribute( "id", ( nid = expando ) );
 						}
 					}
 
@@ -876,14 +876,14 @@ function Sizzle( selector, context, results, seed ) {
 
 				try {
 					push.apply( results,
-						newContext.querySelectorAll( newSelector )
+						newContextNew.querySelectorAll( newSelector )
 					);
 					return results;
 				} catch ( qsaError ) {
 					nonnativeSelectorCache( selector, true );
 				} finally {
 					if ( nid === expando ) {
-						context.removeAttribute( "id" );
+						ContextNew.removeAttribute( "id" );
 					}
 				}
 			}
@@ -891,7 +891,7 @@ function Sizzle( selector, context, results, seed ) {
 	}
 
 	// All others
-	return select( selector.replace( rtrim, "$1" ), context, results, seed );
+	return select( selector.replace( rtrim, "$1" ), ContextNew, results, seed );
 }
 
 /**
@@ -1091,12 +1091,12 @@ function createPositionalPseudo( fn ) {
 }
 
 /**
- * Checks a node for validity as a Sizzle context
- * @param {Element|Object=} context
+ * Checks a node for validity as a Sizzle ContextNew
+ * @param {Element|Object=} ContextNew
  * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value
  */
-function testContext( context ) {
-	return context && typeof context.getElementsByTagName !== "undefined" && context;
+function testContextNew( ContextNew ) {
+	return ContextNew && typeof ContextNew.getElementsByTagName !== "undefined" && ContextNew;
 }
 
 // Expose support vars for convenience
@@ -1210,9 +1210,9 @@ setDocument = Sizzle.setDocument = function( node ) {
 				return elem.getAttribute( "id" ) === attrId;
 			};
 		};
-		Expr.find[ "ID" ] = function( id, context ) {
-			if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
-				var elem = context.getElementById( id );
+		Expr.find[ "ID" ] = function( id, ContextNew ) {
+			if ( typeof ContextNew.getElementById !== "undefined" && documentIsHTML ) {
+				var elem = ContextNew.getElementById( id );
 				return elem ? [ elem ] : [];
 			}
 		};
@@ -1228,10 +1228,10 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 		// Support: IE 6 - 7 only
 		// getElementById is not reliable as a find shortcut
-		Expr.find[ "ID" ] = function( id, context ) {
-			if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
+		Expr.find[ "ID" ] = function( id, ContextNew ) {
+			if ( typeof ContextNew.getElementById !== "undefined" && documentIsHTML ) {
 				var node, i, elems,
-					elem = context.getElementById( id );
+					elem = ContextNew.getElementById( id );
 
 				if ( elem ) {
 
@@ -1242,7 +1242,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 					}
 
 					// Fall back on getElementsByName
-					elems = context.getElementsByName( id );
+					elems = ContextNew.getElementsByName( id );
 					i = 0;
 					while ( ( elem = elems[ i++ ] ) ) {
 						node = elem.getAttributeNode( "id" );
@@ -1259,23 +1259,23 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 	// Tag
 	Expr.find[ "TAG" ] = support.getElementsByTagName ?
-		function( tag, context ) {
-			if ( typeof context.getElementsByTagName !== "undefined" ) {
-				return context.getElementsByTagName( tag );
+		function( tag, ContextNew ) {
+			if ( typeof ContextNew.getElementsByTagName !== "undefined" ) {
+				return ContextNew.getElementsByTagName( tag );
 
 			// DocumentFragment nodes don't have gEBTN
 			} else if ( support.qsa ) {
-				return context.querySelectorAll( tag );
+				return ContextNew.querySelectorAll( tag );
 			}
 		} :
 
-		function( tag, context ) {
+		function( tag, ContextNew ) {
 			var elem,
 				tmp = [],
 				i = 0,
 
 				// By happy coincidence, a (broken) gEBTN appears on DocumentFragment nodes too
-				results = context.getElementsByTagName( tag );
+				results = ContextNew.getElementsByTagName( tag );
 
 			// Filter out possible comments
 			if ( tag === "*" ) {
@@ -1291,9 +1291,9 @@ setDocument = Sizzle.setDocument = function( node ) {
 		};
 
 	// Class
-	Expr.find[ "CLASS" ] = support.getElementsByClassName && function( className, context ) {
-		if ( typeof context.getElementsByClassName !== "undefined" && documentIsHTML ) {
-			return context.getElementsByClassName( className );
+	Expr.find[ "CLASS" ] = support.getElementsByClassName && function( className, ContextNew ) {
+		if ( typeof ContextNew.getElementsByClassName !== "undefined" && documentIsHTML ) {
+			return ContextNew.getElementsByClassName( className );
 		}
 	};
 
@@ -1629,17 +1629,17 @@ Sizzle.matchesSelector = function( elem, expr ) {
 	return Sizzle( expr, document, null, [ elem ] ).length > 0;
 };
 
-Sizzle.contains = function( context, elem ) {
+Sizzle.contains = function( ContextNew, elem ) {
 
 	// Set document vars if needed
 	// Support: IE 11+, Edge 17 - 18+
 	// IE/Edge sometimes throw a "Permission denied" error when strict-comparing
 	// two documents; shallow comparisons work.
 	// eslint-disable-next-line eqeqeq
-	if ( ( context.ownerDocument || context ) != document ) {
-		setDocument( context );
+	if ( ( ContextNew.ownerDocument || ContextNew ) != document ) {
+		setDocument( ContextNew );
 	}
-	return contains( context, elem );
+	return contains( ContextNew, elem );
 };
 
 Sizzle.attr = function( elem, name ) {
@@ -1921,7 +1921,7 @@ Expr = Sizzle.selectors = {
 					return !!elem.parentNode;
 				} :
 
-				function( elem, _context, xml ) {
+				function( elem, _ContextNew, xml ) {
 					var cache, uniqueCache, outerCache, node, nodeIndex, start,
 						dir = simple !== forward ? "nextSibling" : "previousSibling",
 						parent = elem.parentNode,
@@ -2095,7 +2095,7 @@ Expr = Sizzle.selectors = {
 				matcher = compile( selector.replace( rtrim, "$1" ) );
 
 			return matcher[ expando ] ?
-				markFunction( function( seed, matches, _context, xml ) {
+				markFunction( function( seed, matches, _ContextNew, xml ) {
 					var elem,
 						unmatched = matcher( seed, null, xml, [] ),
 						i = seed.length;
@@ -2107,7 +2107,7 @@ Expr = Sizzle.selectors = {
 						}
 					}
 				} ) :
-				function( elem, _context, xml ) {
+				function( elem, _ContextNew, xml ) {
 					input[ 0 ] = elem;
 					matcher( input, null, xml, results );
 
@@ -2400,17 +2400,17 @@ function addCombinator( matcher, combinator, base ) {
 	return combinator.first ?
 
 		// Check against closest ancestor/preceding element
-		function( elem, context, xml ) {
+		function( elem, ContextNew, xml ) {
 			while ( ( elem = elem[ dir ] ) ) {
 				if ( elem.nodeType === 1 || checkNonElements ) {
-					return matcher( elem, context, xml );
+					return matcher( elem, ContextNew, xml );
 				}
 			}
 			return false;
 		} :
 
 		// Check against all ancestor/preceding elements
-		function( elem, context, xml ) {
+		function( elem, ContextNew, xml ) {
 			var oldCache, uniqueCache, outerCache,
 				newCache = [ dirruns, doneName ];
 
@@ -2418,7 +2418,7 @@ function addCombinator( matcher, combinator, base ) {
 			if ( xml ) {
 				while ( ( elem = elem[ dir ] ) ) {
 					if ( elem.nodeType === 1 || checkNonElements ) {
-						if ( matcher( elem, context, xml ) ) {
+						if ( matcher( elem, ContextNew, xml ) ) {
 							return true;
 						}
 					}
@@ -2446,7 +2446,7 @@ function addCombinator( matcher, combinator, base ) {
 							uniqueCache[ key ] = newCache;
 
 							// A match means we're done; a fail means we have to keep checking
-							if ( ( newCache[ 2 ] = matcher( elem, context, xml ) ) ) {
+							if ( ( newCache[ 2 ] = matcher( elem, ContextNew, xml ) ) ) {
 								return true;
 							}
 						}
@@ -2459,10 +2459,10 @@ function addCombinator( matcher, combinator, base ) {
 
 function elementMatcher( matchers ) {
 	return matchers.length > 1 ?
-		function( elem, context, xml ) {
+		function( elem, ContextNew, xml ) {
 			var i = matchers.length;
 			while ( i-- ) {
-				if ( !matchers[ i ]( elem, context, xml ) ) {
+				if ( !matchers[ i ]( elem, ContextNew, xml ) ) {
 					return false;
 				}
 			}
@@ -2471,16 +2471,16 @@ function elementMatcher( matchers ) {
 		matchers[ 0 ];
 }
 
-function multipleContexts( selector, contexts, results ) {
+function multipleContextNews( selector, ContextNews, results ) {
 	var i = 0,
-		len = contexts.length;
+		len = ContextNews.length;
 	for ( ; i < len; i++ ) {
-		Sizzle( selector, contexts[ i ], results );
+		Sizzle( selector, ContextNews[ i ], results );
 	}
 	return results;
 }
 
-function condense( unmatched, map, filter, context, xml ) {
+function condense( unmatched, map, filter, ContextNew, xml ) {
 	var elem,
 		newUnmatched = [],
 		i = 0,
@@ -2489,7 +2489,7 @@ function condense( unmatched, map, filter, context, xml ) {
 
 	for ( ; i < len; i++ ) {
 		if ( ( elem = unmatched[ i ] ) ) {
-			if ( !filter || filter( elem, context, xml ) ) {
+			if ( !filter || filter( elem, ContextNew, xml ) ) {
 				newUnmatched.push( elem );
 				if ( mapped ) {
 					map.push( i );
@@ -2508,22 +2508,22 @@ function setMatcher( preFilter, selector, matcher, postFilter, postFinder, postS
 	if ( postFinder && !postFinder[ expando ] ) {
 		postFinder = setMatcher( postFinder, postSelector );
 	}
-	return markFunction( function( seed, results, context, xml ) {
+	return markFunction( function( seed, results, ContextNew, xml ) {
 		var temp, i, elem,
 			preMap = [],
 			postMap = [],
 			preexisting = results.length,
 
-			// Get initial elements from seed or context
-			elems = seed || multipleContexts(
+			// Get initial elements from seed or ContextNew
+			elems = seed || multipleContextNews(
 				selector || "*",
-				context.nodeType ? [ context ] : context,
+				ContextNew.nodeType ? [ ContextNew ] : ContextNew,
 				[]
 			),
 
 			// Prefilter to get matcher input, preserving a map for seed-results synchronization
 			matcherIn = preFilter && ( seed || !selector ) ?
-				condense( elems, preMap, preFilter, context, xml ) :
+				condense( elems, preMap, preFilter, ContextNew, xml ) :
 				elems,
 
 			matcherOut = matcher ?
@@ -2540,13 +2540,13 @@ function setMatcher( preFilter, selector, matcher, postFilter, postFinder, postS
 
 		// Find primary matches
 		if ( matcher ) {
-			matcher( matcherIn, matcherOut, context, xml );
+			matcher( matcherIn, matcherOut, ContextNew, xml );
 		}
 
 		// Apply postFilter
 		if ( postFilter ) {
 			temp = condense( matcherOut, postMap );
-			postFilter( temp, [], context, xml );
+			postFilter( temp, [], ContextNew, xml );
 
 			// Un-match failing elements by moving them back to matcherIn
 			i = temp.length;
@@ -2561,7 +2561,7 @@ function setMatcher( preFilter, selector, matcher, postFilter, postFinder, postS
 			if ( postFinder || preFilter ) {
 				if ( postFinder ) {
 
-					// Get the final matcherOut by condensing this intermediate into postFinder contexts
+					// Get the final matcherOut by condensing this intermediate into postFinder ContextNews
 					temp = [];
 					i = matcherOut.length;
 					while ( i-- ) {
@@ -2602,27 +2602,27 @@ function setMatcher( preFilter, selector, matcher, postFilter, postFinder, postS
 }
 
 function matcherFromTokens( tokens ) {
-	var checkContext, matcher, j,
+	var checkContextNew, matcher, j,
 		len = tokens.length,
 		leadingRelative = Expr.relative[ tokens[ 0 ].type ],
 		implicitRelative = leadingRelative || Expr.relative[ " " ],
 		i = leadingRelative ? 1 : 0,
 
-		// The foundational matcher ensures that elements are reachable from top-level context(s)
-		matchContext = addCombinator( function( elem ) {
-			return elem === checkContext;
+		// The foundational matcher ensures that elements are reachable from top-level ContextNew(s)
+		matchContextNew = addCombinator( function( elem ) {
+			return elem === checkContextNew;
 		}, implicitRelative, true ),
-		matchAnyContext = addCombinator( function( elem ) {
-			return indexOf( checkContext, elem ) > -1;
+		matchAnyContextNew = addCombinator( function( elem ) {
+			return indexOf( checkContextNew, elem ) > -1;
 		}, implicitRelative, true ),
-		matchers = [ function( elem, context, xml ) {
-			var ret = ( !leadingRelative && ( xml || context !== outermostContext ) ) || (
-				( checkContext = context ).nodeType ?
-					matchContext( elem, context, xml ) :
-					matchAnyContext( elem, context, xml ) );
+		matchers = [ function( elem, ContextNew, xml ) {
+			var ret = ( !leadingRelative && ( xml || ContextNew !== outermostContextNew ) ) || (
+				( checkContextNew = ContextNew ).nodeType ?
+					matchContextNew( elem, ContextNew, xml ) :
+					matchAnyContextNew( elem, ContextNew, xml ) );
 
 			// Avoid hanging onto element (issue #299)
-			checkContext = null;
+			checkContextNew = null;
 			return ret;
 		} ];
 
@@ -2667,19 +2667,19 @@ function matcherFromTokens( tokens ) {
 function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 	var bySet = setMatchers.length > 0,
 		byElement = elementMatchers.length > 0,
-		superMatcher = function( seed, context, xml, results, outermost ) {
+		superMatcher = function( seed, ContextNew, xml, results, outermost ) {
 			var elem, j, matcher,
 				matchedCount = 0,
 				i = "0",
 				unmatched = seed && [],
 				setMatched = [],
-				contextBackup = outermostContext,
+				ContextNewBackup = outermostContextNew,
 
-				// We must always have either seed elements or outermost context
+				// We must always have either seed elements or outermost ContextNew
 				elems = seed || byElement && Expr.find[ "TAG" ]( "*", outermost ),
 
 				// Use integer dirruns iff this is the outermost matcher
-				dirrunsUnique = ( dirruns += contextBackup == null ? 1 : Math.random() || 0.1 ),
+				dirrunsUnique = ( dirruns += ContextNewBackup == null ? 1 : Math.random() || 0.1 ),
 				len = elems.length;
 
 			if ( outermost ) {
@@ -2688,7 +2688,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 				// IE/Edge sometimes throw a "Permission denied" error when strict-comparing
 				// two documents; shallow comparisons work.
 				// eslint-disable-next-line eqeqeq
-				outermostContext = context == document || context || outermost;
+				outermostContextNew = ContextNew == document || ContextNew || outermost;
 			}
 
 			// Add elements passing elementMatchers directly to results
@@ -2702,12 +2702,12 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 					// IE/Edge sometimes throw a "Permission denied" error when strict-comparing
 					// two documents; shallow comparisons work.
 					// eslint-disable-next-line eqeqeq
-					if ( !context && elem.ownerDocument != document ) {
+					if ( !ContextNew && elem.ownerDocument != document ) {
 						setDocument( elem );
 						xml = !documentIsHTML;
 					}
 					while ( ( matcher = elementMatchers[ j++ ] ) ) {
-						if ( matcher( elem, context || document, xml ) ) {
+						if ( matcher( elem, ContextNew || document, xml ) ) {
 							results.push( elem );
 							break;
 						}
@@ -2746,7 +2746,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			if ( bySet && i !== matchedCount ) {
 				j = 0;
 				while ( ( matcher = setMatchers[ j++ ] ) ) {
-					matcher( unmatched, setMatched, context, xml );
+					matcher( unmatched, setMatched, ContextNew, xml );
 				}
 
 				if ( seed ) {
@@ -2778,7 +2778,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			// Override manipulation of globals by nested matchers
 			if ( outermost ) {
 				dirruns = dirrunsUnique;
-				outermostContext = contextBackup;
+				outermostContextNew = ContextNewBackup;
 			}
 
 			return unmatched;
@@ -2828,11 +2828,11 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
  *  selector functions
  * @param {String|Function} selector A selector or a pre-compiled
  *  selector function built with Sizzle.compile
- * @param {Element} context
+ * @param {Element} ContextNew
  * @param {Array} [results]
  * @param {Array} [seed] A set of elements to match against
  */
-select = Sizzle.select = function( selector, context, results, seed ) {
+select = Sizzle.select = function( selector, ContextNew, results, seed ) {
 	var i, tokens, token, type, find,
 		compiled = typeof selector === "function" && selector,
 		match = !seed && tokenize( ( selector = compiled.selector || selector ) );
@@ -2840,29 +2840,29 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 	results = results || [];
 
 	// Try to minimize operations if there is only one selector in the list and no seed
-	// (the latter of which guarantees us context)
+	// (the latter of which guarantees us ContextNew)
 	if ( match.length === 1 ) {
 
-		// Reduce context if the leading compound selector is an ID
+		// Reduce ContextNew if the leading compound selector is an ID
 		tokens = match[ 0 ] = match[ 0 ].slice( 0 );
 		if ( tokens.length > 2 && ( token = tokens[ 0 ] ).type === "ID" &&
-			context.nodeType === 9 && documentIsHTML && Expr.relative[ tokens[ 1 ].type ] ) {
+			ContextNew.nodeType === 9 && documentIsHTML && Expr.relative[ tokens[ 1 ].type ] ) {
 
-			context = ( Expr.find[ "ID" ]( token.matches[ 0 ]
-				.replace( runescape, funescape ), context ) || [] )[ 0 ];
-			if ( !context ) {
+			ContextNew = ( Expr.find[ "ID" ]( token.matches[ 0 ]
+				.replace( runescape, funescape ), ContextNew ) || [] )[ 0 ];
+			if ( !ContextNew ) {
 				return results;
 
 			// Precompiled matchers will still verify ancestry, so step up a level
 			} else if ( compiled ) {
-				context = context.parentNode;
+				ContextNew = ContextNew.parentNode;
 			}
 
 			selector = selector.slice( tokens.shift().value.length );
 		}
 
 		// Fetch a seed set for right-to-left matching
-		i = matchExpr[ "needsContext" ].test( selector ) ? 0 : tokens.length;
+		i = matchExpr[ "needsContextNew" ].test( selector ) ? 0 : tokens.length;
 		while ( i-- ) {
 			token = tokens[ i ];
 
@@ -2872,11 +2872,11 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 			}
 			if ( ( find = Expr.find[ type ] ) ) {
 
-				// Search, expanding context for leading sibling combinators
+				// Search, expanding ContextNew for leading sibling combinators
 				if ( ( seed = find(
 					token.matches[ 0 ].replace( runescape, funescape ),
-					rsibling.test( tokens[ 0 ].type ) && testContext( context.parentNode ) ||
-						context
+					rsibling.test( tokens[ 0 ].type ) && testContextNew( ContextNew.parentNode ) ||
+						ContextNew
 				) ) ) {
 
 					// If seed is empty or no tokens remain, we can return early
@@ -2897,10 +2897,10 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 	// Provide `match` to avoid retokenization if we modified the selector above
 	( compiled || compile( selector, match ) )(
 		seed,
-		context,
+		ContextNew,
 		!documentIsHTML,
 		results,
-		!context || rsibling.test( selector ) && testContext( context.parentNode ) || context
+		!ContextNew || rsibling.test( selector ) && testContextNew( ContextNew.parentNode ) || ContextNew
 	);
 	return results;
 };
@@ -3018,7 +3018,7 @@ var siblings = function( n, elem ) {
 };
 
 
-var rneedsContext = jQuery.expr.match.needsContext;
+var rneedsContextNew = jQuery.expr.match.needsContextNew;
 
 
 
@@ -3109,7 +3109,7 @@ jQuery.fn.extend( {
 
 			// If this is a positional/relative selector, check membership in the returned set
 			// so $("p:first").is("p:last") won't return true for a doc with two "p".
-			typeof selector === "string" && rneedsContext.test( selector ) ?
+			typeof selector === "string" && rneedsContextNew.test( selector ) ?
 				jQuery( selector ) :
 				selector || [],
 			false
@@ -3130,7 +3130,7 @@ var rootjQuery,
 	// Shortcut simple #id case for speed
 	rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]+))$/,
 
-	init = jQuery.fn.init = function( selector, context, root ) {
+	init = jQuery.fn.init = function( selector, ContextNew, root ) {
 		var match, elem;
 
 		// HANDLE: $(""), $(null), $(undefined), $(false)
@@ -3155,32 +3155,32 @@ var rootjQuery,
 				match = rquickExpr.exec( selector );
 			}
 
-			// Match html or make sure no context is specified for #id
-			if ( match && ( match[ 1 ] || !context ) ) {
+			// Match html or make sure no ContextNew is specified for #id
+			if ( match && ( match[ 1 ] || !ContextNew ) ) {
 
 				// HANDLE: $(html) -> $(array)
 				if ( match[ 1 ] ) {
-					context = context instanceof jQuery ? context[ 0 ] : context;
+					ContextNew = ContextNew instanceof jQuery ? ContextNew[ 0 ] : ContextNew;
 
 					// Option to run scripts is true for back-compat
 					// Intentionally let the error be thrown if parseHTML is not present
 					jQuery.merge( this, jQuery.parseHTML(
 						match[ 1 ],
-						context && context.nodeType ? context.ownerDocument || context : document,
+						ContextNew && ContextNew.nodeType ? ContextNew.ownerDocument || ContextNew : document,
 						true
 					) );
 
 					// HANDLE: $(html, props)
-					if ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( context ) ) {
-						for ( match in context ) {
+					if ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( ContextNew ) ) {
+						for ( match in ContextNew ) {
 
-							// Properties of context are called as methods if possible
+							// Properties of ContextNew are called as methods if possible
 							if ( isFunction( this[ match ] ) ) {
-								this[ match ]( context[ match ] );
+								this[ match ]( ContextNew[ match ] );
 
 							// ...and otherwise set as attributes
 							} else {
-								this.attr( match, context[ match ] );
+								this.attr( match, ContextNew[ match ] );
 							}
 						}
 					}
@@ -3201,13 +3201,13 @@ var rootjQuery,
 				}
 
 			// HANDLE: $(expr, $(...))
-			} else if ( !context || context.jquery ) {
-				return ( context || root ).find( selector );
+			} else if ( !ContextNew || ContextNew.jquery ) {
+				return ( ContextNew || root ).find( selector );
 
-			// HANDLE: $(expr, context)
-			// (which is just equivalent to: $(context).find(expr)
+			// HANDLE: $(expr, ContextNew)
+			// (which is just equivalent to: $(ContextNew).find(expr)
 			} else {
-				return this.constructor( context ).find( selector );
+				return this.constructor( ContextNew ).find( selector );
 			}
 
 		// HANDLE: $(DOMElement)
@@ -3261,17 +3261,17 @@ jQuery.fn.extend( {
 		} );
 	},
 
-	closest: function( selectors, context ) {
+	closest: function( selectors, ContextNew ) {
 		var cur,
 			i = 0,
 			l = this.length,
 			matched = [],
 			targets = typeof selectors !== "string" && jQuery( selectors );
 
-		// Positional selectors never match, since there's no _selection_ context
-		if ( !rneedsContext.test( selectors ) ) {
+		// Positional selectors never match, since there's no _selection_ ContextNew
+		if ( !rneedsContextNew.test( selectors ) ) {
 			for ( ; i < l; i++ ) {
-				for ( cur = this[ i ]; cur && cur !== context; cur = cur.parentNode ) {
+				for ( cur = this[ i ]; cur && cur !== ContextNew; cur = cur.parentNode ) {
 
 					// Always skip document fragments
 					if ( cur.nodeType < 11 && ( targets ?
@@ -3312,10 +3312,10 @@ jQuery.fn.extend( {
 		);
 	},
 
-	add: function( selector, context ) {
+	add: function( selector, ContextNew ) {
 		return this.pushStack(
 			jQuery.uniqueSort(
-				jQuery.merge( this.get(), jQuery( selector, context ) )
+				jQuery.merge( this.get(), jQuery( selector, ContextNew ) )
 			)
 		);
 	},
@@ -3616,11 +3616,11 @@ jQuery.Callbacks = function( options ) {
 				return !!locked;
 			},
 
-			// Call all callbacks with the given context and arguments
-			fireWith: function( context, args ) {
+			// Call all callbacks with the given ContextNew and arguments
+			fireWith: function( ContextNew, args ) {
 				if ( !locked ) {
 					args = args || [];
-					args = [ context, args.slice ? args.slice() : args ];
+					args = [ ContextNew, args.slice ? args.slice() : args ];
 					queue.push( args );
 					if ( !firing ) {
 						fire();
@@ -3680,7 +3680,7 @@ function adoptValue( value, resolve, reject, noValue ) {
 	} catch ( value ) {
 
 		// Support: Android 4.0 only
-		// Strict mode functions invoked without .call/.apply get global-object context
+		// Strict mode functions invoked without .call/.apply get global-object ContextNew
 		reject.apply( undefined, [ value ] );
 	}
 }
@@ -3809,7 +3809,7 @@ jQuery.extend( {
 									// Handle all other returned values
 									} else {
 
-										// Only substitute handlers pass on context
+										// Only substitute handlers pass on ContextNew
 										// and multiple values (non-spec behavior)
 										if ( handler !== Identity ) {
 											that = undefined;
@@ -3840,7 +3840,7 @@ jQuery.extend( {
 											// Ignore post-resolution exceptions
 											if ( depth + 1 >= maxDepth ) {
 
-												// Only substitute handlers pass on context
+												// Only substitute handlers pass on ContextNew
 												// and multiple values (non-spec behavior)
 												if ( handler !== Thrower ) {
 													that = undefined;
@@ -3994,7 +3994,7 @@ jQuery.extend( {
 			i = remaining,
 
 			// subordinate fulfillment data
-			resolveContexts = Array( i ),
+			resolveContextNews = Array( i ),
 			resolveValues = slice.call( arguments ),
 
 			// the master Deferred
@@ -4003,10 +4003,10 @@ jQuery.extend( {
 			// subordinate callback factory
 			updateFunc = function( i ) {
 				return function( value ) {
-					resolveContexts[ i ] = this;
+					resolveContextNews[ i ] = this;
 					resolveValues[ i ] = arguments.length > 1 ? slice.call( arguments ) : value;
 					if ( !( --remaining ) ) {
-						master.resolveWith( resolveContexts, resolveValues );
+						master.resolveWith( resolveContextNews, resolveValues );
 					}
 				};
 			};
@@ -4958,24 +4958,24 @@ if ( !support.option ) {
 }
 
 
-function getAll( context, tag ) {
+function getAll( ContextNew, tag ) {
 
 	// Support: IE <=9 - 11 only
 	// Use typeof to avoid zero-argument method invocation on host objects (#15151)
 	var ret;
 
-	if ( typeof context.getElementsByTagName !== "undefined" ) {
-		ret = context.getElementsByTagName( tag || "*" );
+	if ( typeof ContextNew.getElementsByTagName !== "undefined" ) {
+		ret = ContextNew.getElementsByTagName( tag || "*" );
 
-	} else if ( typeof context.querySelectorAll !== "undefined" ) {
-		ret = context.querySelectorAll( tag || "*" );
+	} else if ( typeof ContextNew.querySelectorAll !== "undefined" ) {
+		ret = ContextNew.querySelectorAll( tag || "*" );
 
 	} else {
 		ret = [];
 	}
 
-	if ( tag === undefined || tag && nodeName( context, tag ) ) {
-		return jQuery.merge( [ context ], ret );
+	if ( tag === undefined || tag && nodeName( ContextNew, tag ) ) {
+		return jQuery.merge( [ ContextNew ], ret );
 	}
 
 	return ret;
@@ -4999,9 +4999,9 @@ function setGlobalEval( elems, refElements ) {
 
 var rhtml = /<|&#?\w+;/;
 
-function buildFragment( elems, context, scripts, selection, ignored ) {
+function buildFragment( elems, ContextNew, scripts, selection, ignored ) {
 	var elem, tmp, tag, wrap, attached, j,
-		fragment = context.createDocumentFragment(),
+		fragment = ContextNew.createDocumentFragment(),
 		nodes = [],
 		i = 0,
 		l = elems.length;
@@ -5020,11 +5020,11 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 
 			// Convert non-html into a text node
 			} else if ( !rhtml.test( elem ) ) {
-				nodes.push( context.createTextNode( elem ) );
+				nodes.push( ContextNew.createTextNode( elem ) );
 
 			// Convert html into DOM nodes
 			} else {
-				tmp = tmp || fragment.appendChild( context.createElement( "div" ) );
+				tmp = tmp || fragment.appendChild( ContextNew.createElement( "div" ) );
 
 				// Deserialize a standard representation
 				tag = ( rtagName.exec( elem ) || [ "", "" ] )[ 1 ].toLowerCase();
@@ -5056,7 +5056,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 	i = 0;
 	while ( ( elem = nodes[ i++ ] ) ) {
 
-		// Skip elements already in the context collection (trac-4087)
+		// Skip elements already in the ContextNew collection (trac-4087)
 		if ( selection && jQuery.inArray( elem, selection ) > -1 ) {
 			if ( ignored ) {
 				ignored.push( elem );
@@ -5091,7 +5091,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 
 var
 	rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|pointer|contextmenu|drag|drop)|click/,
+	rmouseEvent = /^(?:mouse|pointer|ContextNewmenu|drag|drop)|click/,
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)/;
 
 function returnTrue() {
@@ -5264,7 +5264,7 @@ jQuery.event = {
 				handler: handler,
 				guid: handler.guid,
 				selector: selector,
-				needsContext: selector && jQuery.expr.match.needsContext.test( selector ),
+				needsContextNew: selector && jQuery.expr.match.needsContextNew.test( selector ),
 				namespace: namespaces.join( "." )
 			}, handleObjIn );
 
@@ -5480,7 +5480,7 @@ jQuery.event = {
 						sel = handleObj.selector + " ";
 
 						if ( matchedSelectors[ sel ] === undefined ) {
-							matchedSelectors[ sel ] = handleObj.needsContext ?
+							matchedSelectors[ sel ] = handleObj.needsContextNew ?
 								jQuery( sel, this ).index( cur ) > -1 :
 								jQuery.find( sel, this, null, [ cur ] ).length;
 						}
@@ -6363,7 +6363,7 @@ jQuery.fn.extend( {
 	replaceWith: function() {
 		var ignored = [];
 
-		// Make the changes, replacing each non-ignored context element with the new content
+		// Make the changes, replacing each non-ignored ContextNew element with the new content
 		return domManip( this, arguments, function( elem ) {
 			var parent = this.parentNode;
 
@@ -9346,7 +9346,7 @@ jQuery.extend( {
 		// deep extended (see ajaxExtend)
 		flatOptions: {
 			url: true,
-			context: true
+			ContextNew: true
 		}
 	},
 
@@ -9408,13 +9408,13 @@ jQuery.extend( {
 			// Create the final options object
 			s = jQuery.ajaxSetup( {}, options ),
 
-			// Callbacks context
-			callbackContext = s.context || s,
+			// Callbacks ContextNew
+			callbackContextNew = s.ContextNew || s,
 
-			// Context for global events is callbackContext if it is a DOM node or jQuery collection
-			globalEventContext = s.context &&
-				( callbackContext.nodeType || callbackContext.jquery ) ?
-					jQuery( callbackContext ) :
+			// ContextNew for global events is callbackContextNew if it is a DOM node or jQuery collection
+			globalEventContextNew = s.ContextNew &&
+				( callbackContextNew.nodeType || callbackContextNew.jquery ) ?
+					jQuery( callbackContextNew ) :
 					jQuery.event,
 
 			// Deferreds
@@ -9637,7 +9637,7 @@ jQuery.extend( {
 
 		// Allow custom headers/mimetypes and early abort
 		if ( s.beforeSend &&
-			( s.beforeSend.call( callbackContext, jqXHR, s ) === false || completed ) ) {
+			( s.beforeSend.call( callbackContextNew, jqXHR, s ) === false || completed ) ) {
 
 			// Abort if not done already and return
 			return jqXHR.abort();
@@ -9662,7 +9662,7 @@ jQuery.extend( {
 
 			// Send global event
 			if ( fireGlobals ) {
-				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
+				globalEventContextNew.trigger( "ajaxSend", [ jqXHR, s ] );
 			}
 
 			// If request was aborted inside ajaxSend, stop there
@@ -9783,9 +9783,9 @@ jQuery.extend( {
 
 			// Success/Error
 			if ( isSuccess ) {
-				deferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] );
+				deferred.resolveWith( callbackContextNew, [ success, statusText, jqXHR ] );
 			} else {
-				deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );
+				deferred.rejectWith( callbackContextNew, [ jqXHR, statusText, error ] );
 			}
 
 			// Status-dependent callbacks
@@ -9793,15 +9793,15 @@ jQuery.extend( {
 			statusCode = undefined;
 
 			if ( fireGlobals ) {
-				globalEventContext.trigger( isSuccess ? "ajaxSuccess" : "ajaxError",
+				globalEventContextNew.trigger( isSuccess ? "ajaxSuccess" : "ajaxError",
 					[ jqXHR, s, isSuccess ? success : error ] );
 			}
 
 			// Complete
-			completeDeferred.fireWith( callbackContext, [ jqXHR, statusText ] );
+			completeDeferred.fireWith( callbackContextNew, [ jqXHR, statusText ] );
 
 			if ( fireGlobals ) {
-				globalEventContext.trigger( "ajaxComplete", [ jqXHR, s ] );
+				globalEventContextNew.trigger( "ajaxComplete", [ jqXHR, s ] );
 
 				// Handle the global AJAX counter
 				if ( !( --jQuery.active ) ) {
@@ -10294,35 +10294,35 @@ support.createHTMLDocument = ( function() {
 
 
 // Argument "data" should be string of html
-// context (optional): If specified, the fragment will be created in this context,
+// ContextNew (optional): If specified, the fragment will be created in this ContextNew,
 // defaults to document
 // keepScripts (optional): If true, will include scripts passed in the html string
-jQuery.parseHTML = function( data, context, keepScripts ) {
+jQuery.parseHTML = function( data, ContextNew, keepScripts ) {
 	if ( typeof data !== "string" ) {
 		return [];
 	}
-	if ( typeof context === "boolean" ) {
-		keepScripts = context;
-		context = false;
+	if ( typeof ContextNew === "boolean" ) {
+		keepScripts = ContextNew;
+		ContextNew = false;
 	}
 
 	var base, parsed, scripts;
 
-	if ( !context ) {
+	if ( !ContextNew ) {
 
 		// Stop scripts or inline event handlers from being executed immediately
 		// by using document.implementation
 		if ( support.createHTMLDocument ) {
-			context = document.implementation.createHTMLDocument( "" );
+			ContextNew = document.implementation.createHTMLDocument( "" );
 
 			// Set the base href for the created document
 			// so any parsed elements with URLs
 			// are based on the document's URL (gh-2965)
-			base = context.createElement( "base" );
+			base = ContextNew.createElement( "base" );
 			base.href = document.location.href;
-			context.head.appendChild( base );
+			ContextNew.head.appendChild( base );
 		} else {
-			context = document;
+			ContextNew = document;
 		}
 	}
 
@@ -10331,10 +10331,10 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 
 	// Single tag
 	if ( parsed ) {
-		return [ context.createElement( parsed[ 1 ] ) ];
+		return [ ContextNew.createElement( parsed[ 1 ] ) ];
 	}
 
-	parsed = buildFragment( [ data ], context, scripts );
+	parsed = buildFragment( [ data ], ContextNew, scripts );
 
 	if ( scripts && scripts.length ) {
 		jQuery( scripts ).remove();
@@ -10728,7 +10728,7 @@ jQuery.fn.extend( {
 
 jQuery.each( ( "blur focus focusin focusout resize scroll click dblclick " +
 	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-	"change select submit keydown keypress keyup contextmenu" ).split( " " ),
+	"change select submit keydown keypress keyup ContextNewmenu" ).split( " " ),
 	function( _i, name ) {
 
 		// Handle event binding
@@ -10746,16 +10746,16 @@ jQuery.each( ( "blur focus focusin focusout resize scroll click dblclick " +
 // Make sure we trim BOM and NBSP
 var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
-// Bind a function to a context, optionally partially applying any
+// Bind a function to a ContextNew, optionally partially applying any
 // arguments.
 // jQuery.proxy is deprecated to promote standards (specifically Function#bind)
 // However, it is not slated for removal any time soon
-jQuery.proxy = function( fn, context ) {
+jQuery.proxy = function( fn, ContextNew ) {
 	var tmp, args, proxy;
 
-	if ( typeof context === "string" ) {
-		tmp = fn[ context ];
-		context = fn;
+	if ( typeof ContextNew === "string" ) {
+		tmp = fn[ ContextNew ];
+		ContextNew = fn;
 		fn = tmp;
 	}
 
@@ -10768,7 +10768,7 @@ jQuery.proxy = function( fn, context ) {
 	// Simulated bind
 	args = slice.call( arguments, 2 );
 	proxy = function() {
-		return fn.apply( context || this, args.concat( slice.call( arguments ) ) );
+		return fn.apply( ContextNew || this, args.concat( slice.call( arguments ) ) );
 	};
 
 	// Set the guid of unique handler to the same of original handler, so it can be removed

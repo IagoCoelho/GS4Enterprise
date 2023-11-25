@@ -1,21 +1,19 @@
-﻿using Enterprise2._0.Models;
+﻿using Enterprise2._0.Data;
+using Enterprise2._0.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Enterprise2._0.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        public readonly ContextNew _ContextNew;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ContextNew ContextNew)
         {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
+            _ContextNew = ContextNew;
         }
 
         public IActionResult Privacy()

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {}
+    "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise3.0\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {
+    "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise3.0\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
+        "projectUniqueName": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise3.0\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
         "projectName": "Enterprise2.0",
-        "projectPath": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
+        "projectPath": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise3.0\\Enterprise2.0\\Enterprise2.0\\Enterprise2.0.csproj",
         "packagesPath": "C:\\Users\\Iago\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise\\Enterprise2.0\\Enterprise2.0\\obj\\",
+        "outputPath": "C:\\Users\\Iago\\Source\\Repos\\GS4Enterprise3.0\\Enterprise2.0\\Enterprise2.0\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Iago\\AppData\\Roaming\\NuGet\\NuGet.Config",

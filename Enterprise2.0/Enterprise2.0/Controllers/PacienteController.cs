@@ -1,45 +1,69 @@
-﻿using Enterprise2._0.Models;
+﻿using Enterprise2._0.Data;
+using Enterprise2._0.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Enterprise2._0.Controllers
 {
     public class PacienteController : Controller
     {
-        private static List<UsuarioPaciente> _lista = new List<UsuarioPaciente>();
-        private static int _id = 0;
+        private readonly ContextNew _ContextNew;
+
+        public PacienteController(ContextNew ContextNew)
+        {
+            _ContextNew = ContextNew;
+        }
 
         [HttpPost]
-        public IActionResult Remover(int id)
+        public async Task<IActionResult> Remover(int id)
         {
-           
-            _lista.RemoveAt(_lista.FindIndex(p => p.IdPaciente == id));
+            var paciente = await _ContextNew.UsuariosPacientes.FindAsync(id);
+            if (paciente == null)
+            {
+                return NotFound();
+            }
+
+            _ContextNew.UsuariosPacientes.Remove(paciente);
+            await _ContextNew.SaveChangesAsync();
             TempData["msg"] = "Paciente removido!";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Editar(UsuarioPaciente paciente)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(UsuarioPaciente paciente)
         {
-            var index = _lista.FindIndex(p => p.IdPaciente == p.IdPaciente);
-            _lista[index] = paciente;
-            TempData["msg"] = "Paciente atualizado!";
-            return RedirectToAction("editar");
-        }
-
-        [HttpGet]
-        public IActionResult Editar(int id)
-        {
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Update(paciente);
+                await _ContextNew.SaveChangesAsync();
+                TempData["msg"] = "Paciente atualizado!";
+                return RedirectToAction(nameof(Editar), new { id = paciente.IdPaciente });
+            }
             ListarGeneros();
- 
-            var index = _lista.FindIndex(p => p.IdPaciente == id);
-            var paciente = _lista[index];
             return View(paciente);
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
         {
-            return View(_lista);
+            var paciente = await _ContextNew.UsuariosPacientes.FindAsync(id);
+            if (paciente == null)
+            {
+                return NotFound();
+            }
+            ListarGeneros();
+            return View(paciente);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var pacientes = await _ContextNew.UsuariosPacientes.ToListAsync();
+            return View(pacientes);
         }
 
         [HttpGet]
@@ -49,19 +73,25 @@ namespace Enterprise2._0.Controllers
             return View();
         }
 
-        private void ListarGeneros()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cadastrar(UsuarioPaciente paciente)
         {
-            var lista = new List<string>(new string[] {"Masculino", "Feminino"});
-            ViewBag.genero = new SelectList(lista);
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Add(paciente);
+                await _ContextNew.SaveChangesAsync();
+                TempData["msg"] = "Paciente cadastrado!";
+                return RedirectToAction(nameof(Cadastrar));
+            }
+            ListarGeneros();
+            return View(paciente);
         }
 
-        [HttpPost]
-        public IActionResult Cadastrar(UsuarioPaciente paciente)
+        private void ListarGeneros()
         {
-            paciente.IdPaciente = ++_id;
-            _lista.Add(paciente);
-            TempData["msg"] = "Paciente cadastrado!";
-            return RedirectToAction("Cadastrar");
+            var lista = new List<string>(new string[] { "Masculino", "Feminino" });
+            ViewBag.genero = new SelectList(lista);
         }
     }
 }

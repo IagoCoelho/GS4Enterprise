@@ -1,43 +1,65 @@
-﻿using Enterprise2._0.Models;
+﻿using Enterprise2._0.Data;
+using Enterprise2._0.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Enterprise2._0.Controllers
 {
     public class FichaController : Controller
     {
-        private static List<Ficha> _lista = new List<Ficha>();
-        private static int _id = 0;
+        private readonly ContextNew _ContextNew;
+
+        public FichaController(ContextNew ContextNew)
+        {
+            _ContextNew = ContextNew;
+        }
 
         [HttpPost]
-        public IActionResult Remover(int id)
+        public async Task<IActionResult> Remover(int id)
         {
-           
-            _lista.RemoveAt(_lista.FindIndex(f => f.IdFicha == id));
-            TempData["msg"] = "Ficha removido!";
+            var ficha = await _ContextNew.Fichas.FindAsync(id);
+            if (ficha == null)
+            {
+                return NotFound();
+            }
+
+            _ContextNew.Fichas.Remove(ficha);
+            await _ContextNew.SaveChangesAsync();
+            TempData["msg"] = "Ficha removida!";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Editar(Ficha ficha)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(Ficha ficha)
         {
-            var index = _lista.FindIndex(f => f.IdFicha == f.IdFicha);
-            _lista[index] = ficha;
-            TempData["msg"] = "Ficha atualizado!";
-            return RedirectToAction("editar");
-        }
-
-        [HttpGet]
-        public IActionResult Editar(int id)
-        {
-            var index = _lista.FindIndex(f => f.IdFicha == id);
-            var ficha = _lista[index];
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Update(ficha);
+                await _ContextNew.SaveChangesAsync();
+                TempData["msg"] = "Ficha atualizada!";
+                return RedirectToAction(nameof(Editar), new { id = ficha.IdFicha });
+            }
             return View(ficha);
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
         {
-            return View(_lista);
+            var ficha = await _ContextNew.Fichas.FindAsync(id);
+            if (ficha == null)
+            {
+                return NotFound();
+            }
+            return View(ficha);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var fichas = await _ContextNew.Fichas.ToListAsync();
+            return View(fichas);
         }
 
         [HttpGet]
@@ -47,12 +69,17 @@ namespace Enterprise2._0.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(Ficha ficha)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cadastrar(Ficha ficha)
         {
-            ficha.IdFicha = ++_id;
-            _lista.Add(ficha);
-            TempData["msg"] = "Ficha cadastrada!";
-            return RedirectToAction("Cadastrar");
+            if (ModelState.IsValid)
+            {
+                _ContextNew.Add(ficha);
+                await _ContextNew.SaveChangesAsync();
+                TempData["msg"] = "Ficha cadastrada!";
+                return RedirectToAction(nameof(Cadastrar));
+            }
+            return View(ficha);
         }
     }
 }
